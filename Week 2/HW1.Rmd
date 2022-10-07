@@ -1,0 +1,9 @@
+Yongsang Park
+
+```{r}
+kids.ages = c(4, 7, 8, 12, 13, 15, 17)
+mean(kids.ages)
+hist(kids.ages)
+rug(kids.ages, col="red")
+```
+

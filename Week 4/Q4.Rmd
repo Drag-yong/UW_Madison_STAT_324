@@ -1,0 +1,25 @@
+Yongsang Park
+
+```{r}
+dbinom(5, 10, .85)
+sum(dbinom(0:2, 10, .1))
+dbinom(0, 10, 0.05)
+sqrt((2-2.21)^2 *.5 + ((2.5-2.21)^2) *.3+((2.3-2.21)^2) *.2)
+
+5.5/3
+sqrt(sum(0.3^2, 0.4^2, 0.4^2))
+
+pnorm(-1, 0, 1)
+
+pnorm(3, 3.3, 0.6)
+
+pnorm(4, 3.3, 0.6) - pnorm(3, 3.3, 0.6)
+
+qnorm(p=0.05, mean=3.3, sd=0.6)
+
+qnorm(p=0.0359, mean=0, sd=1)
+
+a = pnorm(q=2.3131, mean=3.3, sd=0.6)
+dbinom(x=2, size=10, prob=a)
+```
+

@@ -1,0 +1,134 @@
+Yongsang Park
+
+# 1. Spiders
+These are the data on the running speed (cm/s) of a certain species of spider.
+```{r}
+spider = c(1.25, 1.64, 1.91, 2.31, 2.37, 2.38, 2.84, 2.87, 2.93, 2.94, 2.98, 3.00, 3.09, 3.22, 3.41)
+```
+
+## 1a.
+```{r}
+hist(spider)
+```
+
+## 1b.
+```{r}
+mean(spider)
+sd(spider)
+```
+The mean indicates the average of the overall numbers. The standard deviation measures how disperse the values are in relation to the mean.
+
+## 1c.
+```{r}
+quantile(spider)
+```
+I agree. The quartiles look good to me.
+
+## 1d.
+```{r}
+IQR(spider)
+```
+
+## 1e.
+```{r}
+boxplot(spider, horizontal = TRUE)
+```
+
+# 2. Two histograms
+## 2a.
+Histogram A / A starts at 5, but B starts at -40
+
+## 2b.
+Histogram B / Because B has a larger range than A.
+
+## 2c.
+For finding the mean and the standard deviation, I think the second pair is easy to find them because you can find the data distribution at a glance.
+
+# 3. Circuit board
+## 3a.
+P(red and green) = red * green (because they are independent)
+```{r}
+0.9 * 0.75
+```
+67.5%
+
+## 3b.
+P(red and not green) + P(not red and green)
+```{r}
+0.9 * 0.25 + 0.1 * 0.75
+```
+
+# 4. Fruit flies
+The possible combinations to choose two flies are (B stands for black, G stands for gray) (B, B), (B, G), (G, B), (G, G). The combinations that two chosen flies have the same color are (B, B) and (G, G).
+The possibility for (B, B) is
+```{r}
+BB = 0.3 * 0.3
+BB
+```
+and the possibility for (G, G) is
+```{r}
+GG = 0.7 * 0.7
+GG
+```
+They could be a multiplication because the possibilities are independent.
+So (B, B) + (G, G) is
+```{r}
+BB + GG
+```
+
+# 5. Dice
+A is the event that the sum of dice is no more than 4.
+B is the event that the first die is a 2.
+
+## 5a.
+The possible outcomes for A are (1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (3, 1), so P(A) is
+```{r}
+A = 6 / 36
+A
+```
+
+## 5b.
+The possible outcomes for B are (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), so P(B) is
+```{r}
+B = 6 / 36
+B
+```
+
+## 5c.
+The possible outcome for A and B is (2, 1), (2, 2), so P(A and B) is
+```{r}
+AB = 2 / 36
+AB
+```
+
+## 5d.
+P(A and B) =
+```{r}
+AB
+```
+
+P(A) * P(B) =
+```{r}
+A * B
+```
+Are P(A and B) and P(A) * P(B) equal?
+```{r}
+AB == A * B
+```
+As they are not equal, they are dependent.
+
+## 5e.
+P(A|B) means find the possible A when B happens.
+The total possible ways that B happens are 6.
+When B happens, the total possible ways that A happens are 2.
+So, P(A|B) =
+```{r}
+PAB = 2 / 6
+PAB
+```
+
+## 5f.
+Does P(A|B) equal to P(A and B) / P(B)?
+```{r}
+PAB == AB / B
+```

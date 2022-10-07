@@ -1,0 +1,63 @@
+Yongsang Park
+
+# 1 QQ plots
+The normal distribution QQ plot is
+```{r}
+qqnorm(rnorm(1000))
+```
+
+and I will compare this QQ plot with the other plots.
+
+## 1a
+The qq plot of the data is
+```{r}
+dataA = c(7,13.2,8.1,8.2,6,9.5,9.4,8.7,9.8,10.9,8.4,7.4,8.4,10,9.7,8.6,12.4,10.7,11,9.4)
+qqnorm(dataA)
+```
+
+and compare to the normal distribution QQ plot, I can tell it is plausibly from a normal population.
+
+## 1b
+The qq plot of the data is
+```{r}
+dataB = c(2.5,1.8,2.6,-1.9,1.6,2.6,1.4,0.9,1.2,2.3,-1.5,1.5,2.5,2.9,-0.1)
+qqnorm(dataB)
+```
+
+and compare to the normal distribution QQ plot, I can tell it is against from a normal population.
+
+## 1c
+The qq plot of the data is
+```{r}
+dataC = c(3.3,1.7,3.3,3.3,2.4,0.5,1.1,1.7,12,14.4,12.8,11.2,10.9,11.7,11.7,11.6)
+qqnorm(dataC)
+```
+
+and compare to the normal distribution QQ plot, I can tell it is against from a normal population.
+
+# 2 Fiber
+The dietary fiber tablet is on average, 250 g of the supplement,with a standard deviation of 2 g
+
+## 2a
+The probability a randomly selected bottle weighs between 246g and 254g is
+```{r}
+pnorm(q = 254, mean = 250, sd = 2) - pnorm(q = 246, mean = 250, sd = 2)
+```
+
+## 2b
+100 bottles are selected randomly. The probability that their average weight is less than 250g is
+```{r}
+pnorm(q = 250, mean = 250, sd = 2 / sqrt(100))
+```
+Central Limit Theorem (CLT) states that for N sufficiently large, the sample mean (X bar) follows approximately N(mu, (sd / sqrt(n))^2), so you can use that expression to find the probability.
+
+# 3 Bulls
+The mean weight is 1135lb and the standard deviation is 97lb.
+40 bulls are randomly selected and loaded on the car.
+The probability that their combined weight exceeds 46000lb is
+```{r}
+1 - pnorm(q = 46000 / 40, mean = 1135, sd = 97 / sqrt(40))
+```
+
+
+

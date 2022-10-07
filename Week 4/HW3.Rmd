@@ -1,0 +1,126 @@
+# Yongsang Park
+# 1. Gambler
+## 1a.
+
+$x$    |  1   |  2   |  3   |  4   |  5   |  6
+-------|------|------|------|------|------|-----
+$p(x)$ | 0.12 | 0.12 | 0.12 | 0.12 | 0.12 | 0.4
+
+## 1b.
+
+The even numbers are 2, 4, and 6.
+```{r}
+0.12 + 0.12 + 0.4
+```
+
+## 1c.
+
+The mean of X is
+```{r}
+mean = 1 * 0.12 + 2 * 0.12 + 3 * 0.12 + 4 * 0.12 + 5 * 0.12 + 6 * 0.4
+mean
+```
+and the variance of X is
+```{r}
+var = (1 - mean)^2 * 0.12 + (2 - mean)^2 * 0.12 + (3 - mean)^2 * 0.12 + (4 - mean)^2 * 0.12 + (5 - mean)^2 * 0.12 + (6 - mean)^2 * 0.4
+var
+```
+
+## 1d.
+
+Each game is independent, so E(2X + Y) = 2E(x) + Y and VAR(2X + Y) = 4VAR(X) + VAR(Y).
+Also, the probability of dice does not change when you roll the dice, so you can infer that X and Y have the same mean and the same variance.
+E(2X + Y) =
+```{r}
+3 * mean
+```
+VAR(2X + Y) =
+```{r}
+5 * var
+```
+so the standard deviation is
+```{r}
+sqrt(5 * var)
+```
+
+
+# 2. Colleges
+
+The possibility that the student will be admitted is 1/6. The total sample size is 7, and only 2 colleges admit.
+```{r}
+dbinom(x = 2, size = 7, prob = 1/6)
+```
+The possibility is 0.23 (rounded to two decimal)
+
+# 3. Airlines
+## 3a
+The possibility that the passenger will not show up is 0.05. It means the possibility that the passenger will show up is 0.95.
+The mean o binomial random variable is (size * probability)
+```{r}
+52 * 0.95
+```
+About 49 people will show up.
+
+## 3b
+The possibility that the passenger will show up is 0.95, the total sample size is 52, and the possibility that we want to know is when x = 51.
+```{r}
+dbinom(x = 51, size = 52, prob = 0.95)
+```
+The probability that 51 passenger will show up is 0.1900541.
+
+## 3c
+The expected number means mean, and it is (size * probability). The variance is (size * probability * (1 - probability)).
+The expected number of passengers is
+```{r}
+52 * 0.95
+```
+and the expected variance of passengers is
+```{r}
+52 * 0.95 * 0.05
+```
+
+# 4 Goombas and Koopa Troopas
+## 4a
+The mean and standard variation of Goombas are 12 inches and 6 inches. The probability that a randomly chosen Goomba has a height between 13 and 15 inches is
+```{r}
+pnorm(q = 15, mean = 12, sd = 6) - pnorm(q = 13, mean = 12, sd = 6)
+```
+
+## 4b.
+Koopa Troopas have normally distributed heights with mean 15 inches and standard deviation 3 inches.
+The probability that a randomly chosen Koopa Troopa is taller than 75% of Goombas is
+```{r}
+1 - pnorm(q = qnorm(p = 0.75, mean = 12, sd = 6), mean = 15, sd = 3)
+```
+
+## 5. Temperatures
+The Fahrenheit is following N(90, 5^2).
+## 5a.
+The probability that one randomly selected instance of the process will have operating temperature greater than 93.8 Fahrenheit is
+```{r}
+1 - pnorm(q = 93.8, mean = 90, sd = 5)
+```
+
+## 5b.
+C (Celsius) is equal to 5 * (F - 32) / 9,
+so E(5 * (F - 32) / 9) = (5/9)(E(F) - 32) and
+VAR(5 * (F - 32) / 9) = (25/81)VAR(F).
+```{r}
+MeanC = (5/9)*(90 - 32)
+MeanC
+VarC = (25/81) * 25
+VarC
+```
+
+## 5c.
+The probability that randomly selected thermometer indicates below 29 Celsius is
+```{r}
+pnorm(q = 29, mean = MeanC, sd = sqrt(VarC))
+```
+
+## 5d.
+The Celsius temperature x such that the probability that the operating temperature in Celsius of one instance is less than x is .25 is
+```{r}
+qnorm(p = 0.25, mean = MeanC, sd = sqrt(VarC))
+```
+

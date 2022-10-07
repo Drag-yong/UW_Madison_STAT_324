@@ -1,0 +1,29 @@
+Yongsang Park
+
+```{r}
+time = c(62, 93, 105, 110, 175, 245)
+concentration = c(24.4, 22.8, 18.1, 21.0, 18.7, 14.3)
+plot(x=time, y=concentration, # Now notice the user-defined labels.
+     xlim=c(0,300), ylim=c(0, 30),
+     main="Drug concentration vs. time",
+     xlab="time since administration (minutes)",
+     ylab="drug concentration in blood (mg/mL)")
+```
+
+```{r}
+corn = c(9.3, 7.7, 9.3, 9.3, 8.4, 6.5, 7.1, 7.7, 8.0, 10.4)
+hist(corn)
+rug(corn, col="red")
+mean(corn)
+sd(corn)
+
+boxplot(corn)
+quantile(corn)
+```
+
+```{r}
+
+PX = c(0.05,0.10,0.12,0.14,0.24,0.17,0.06,0.04,0.03,0.02,0.01,0.005,0.005,0.005,0.0037,0.0013)
+sum(0.05,0.10,0.12,0.14,0.24,0.17)
+```
+
