@@ -1,7 +1,12 @@
 ## 1.
 Here are the heights, in feet, of the hightest points in the 50 United States:
 ```
-2413, 20310, 12637, 14505, 14440, 2379, 447, 345, 4784, 13803, 12668, 1235, 1257, 1671, 4041, 4145, 535, 5270, 3360, 3489, 1979, 2302, 807, 1772, 12807, 5427, 13147, 6288, 1803, 13167, 5343, 6684, 3508, 1549, 4975, 11249, 3213, 811, 3560, 7244, 6643, 8751, 13534, 4395, 5729, 14417, 4863, 1951, 13809
+2413, 20310, 12637, 14505, 14440, 2379, 447, 345, 4784,
+13803, 12668, 1235, 1257, 1671, 4041, 4145, 535, 5270,
+3360, 3489, 1979, 2302, 807, 1772, 12807, 5427, 13147,
+6288, 1803, 13167, 5343, 6684, 3508, 1549, 4975, 11249,
+3213, 811, 3560, 7244, 6643, 8751, 13534, 4395, 5729,
+14417, 4863, 1951, 13809
 ```
 Use `c()` to put them in an R vector called `heights`.
 
@@ -9,7 +14,7 @@ Run `sort(heights)` to see a sorted version of your vector.
 
 What is the smallest of the state high points?
 
-###answer: 345
+### answer: 345
 
 ## 2.
 What is the largest state high point?
@@ -21,12 +26,12 @@ What is the largest state high point?
 ## 3.
 What is the average height? (Give an exact answer. It has two decimal places.)
 
-###answer: 6164.28
+### answer: 6164.28
 
 ## 4.
 What is the median height? (Give an exact answer. It has one decimal place.)
 
-###answer: 4589.5
+### answer: 4589.5
 
 ## 5.
 Make a dot plot of the heights by running `stripchart(heights)`. On which side is the outlying point?
