@@ -1,0 +1,22 @@
+```{r}
+pnorm(3.3, mean = 3, sd = 1/sqrt(50))
+1 - pnorm(165 / 50, mean = 3, sd = 1/sqrt(50))
+x = c( 4.9, 4.0, 5.5, 6.3, 4.6, 5.0, 3.3, 5.3, 4.6, 3.6)
+qqnorm(x)
+
+m = mean(x)
+
+a = m - qnorm(1 - 0.05) / sqrt(10)
+b = m + qnorm(1 - 0.05) / sqrt(10)
+
+a
+b
+
+b - a
+
+(qnorm(1 - 0.05) / 0.1) ^ 2
+
+
+```
+qnorm(1 - 0.05) * 1 / sqrt(x) = 0.1
+sqrt(x) = qnorm(1 - 0.05) / 0.1
