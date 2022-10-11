@@ -1,0 +1,43 @@
+Yongsang Park
+
+# 1 Confidence interval for dissolved oxygen
+The samples are given. The sample mean is 9.14 and sd = 2
+
+## 1a
+Find the 98% confidence interval
+```{r}
+sample = c(11.53, 8.35, 11.66, 11.54, 9.83, 5.92, 7.14, 8.41, 8.99, 13.81, 10.53, 7.4, 6.7, 8.42, 8.4, 8.18, 9.5, 7.22, 9.87,
+6.52, 8.55, 9.75, 9.27, 10.61, 8.89, 10.01, 11.17, 7.62, 6.43, 9.09, 8.53, 7.91, 8.13, 7.7, 10.45, 11.3, 10.98, 8.14,
+11.48, 8.44, 12.52, 10.12, 8.09, 7.34)
+```
+The confidence margin equation m = z_alpha/2 * (sd / sqrt(n))
+```{r}
+alpha = 0.02
+m = qnorm(1 - alpha / 2) * 2 / sqrt(44)
+m
+meanSample = mean(sample)
+meanSample
+```
+So the confidence interval is 9.146364 +- 0.7014203
+
+## 1b
+That means if you collect many simple random samples almost about 98% of sample collections will contain the mean mu.
+
+## 1c
+0.5 = z_0.01 * 2 / sqrt(x)
+=> sqrt(x) = z_0.01 * 2 / 0.5
+```{r}
+(qnorm(1 - 0.01) * 2 / 0.5) ^ 2
+```
+so we got 86.59031. Round up, and you will get 87.
+
+
+## 1d
+```{r}
+qqnorm(sample)
+```
+
+This QQ plot tells we can assume this sample values are following the normal distribution. So, I can tell this is plausible that the sample came from a normal population.
+
+
+
