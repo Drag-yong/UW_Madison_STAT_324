@@ -1,0 +1,9 @@
+```{r}
+test_statistics = (2005 - 2000)/(5/sqrt(10))
+test_statistics
+
+1 - pnorm(test_statistics)
+
+0.45 / -qnorm(0.025) * sqrt(40)
+```
+
