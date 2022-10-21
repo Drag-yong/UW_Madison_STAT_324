@@ -1,0 +1,73 @@
+Yongsang Park
+
+## 1. Test for dissolved oxygen
+SRS (n = 44)
+```{r}
+SRS = c(11.53, 8.35, 11.66, 11.54, 9.83, 5.92, 7.14, 8.41, 8.99, 13.81, 10.53, 7.4, 6.7, 8.42, 8.4, 8.18, 9.5, 7.22, 9.87,
+6.52, 8.55, 9.75, 9.27, 10.61, 8.89, 10.01, 11.17, 7.62, 6.43, 9.09, 8.53, 7.91, 8.13, 7.7, 10.45, 11.3, 10.98, 8.14,
+11.48, 8.44, 12.52, 10.12, 8.09, 7.34)
+```
+sample mean = 9.14
+population sd = 2
+H0: mean = 10 vs. Ha: mean != 10
+alpha = 0.02
+
+## 1a.
+The test statistic is Z = (sampleMean - populationMean) / (SD / sqrt(n))
+So the test statistic is
+```{r}
+test_statistic = (9.14 - 10) / (2 / sqrt(44))
+test_statistic
+```
+and the p-value is P(Z < test_statistic) = P(Z < -2.852297)
+```{r}
+p_value = pnorm(test_statistic)
+p_value
+```
+
+## 1b.
+The point where the alpha is 0.02 is
+```{r}
+qnorm(0.02 / 2)
+```
+and the test statistic is below that point. Also, the p value is small enough to reject the H0.
+So I can reject the null hypothesis.
+
+## 2. Pain-killing drug
+200 doses
+
+population mean: 2.0
+
+population sd: 0.1
+
+H0: mean = 2.0
+
+Ha: mean != 2.0
+
+If we make a table,
+
+|        |Reject H0               | Not Reject H0     |
+|--------|------------------------|-------------------|
+|H0 True |type 1 error / alpha    |1 - alpha          |
+|H0 False|1 - beta                |type 2 error / beta|
+
+
+## 2a.
+The test mean was 2.0, which means H0 is true, but it reject H0. So it has type 1 error.
+
+the answer is alpha.
+
+## 2b.
+The test mean was not 2.0, or H0 is false, and the test assert the mean is different.
+
+The answer is 1 - beta.
+
+## 2c.
+The test mean was 2.0, or H0 is true, and it does not reject H0.
+
+The answer is 1 - alpha.
+
+## 2d.
+The test mean was not 2.0, or H0 is false, but it does not reject H0, which is type 2 error.
+
+The answer is beta.
