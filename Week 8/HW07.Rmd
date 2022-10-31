@@ -1,0 +1,104 @@
+Yongsang Park
+
+## 1. Skin wounds
+```{r}
+SRS = c(29, 27, 34, 40, 22, 28, 14, 35, 26, 35, 12, 30, 23, 18, 11, 22, 23, 33)
+n = 18
+```
+
+## 1a.
+If you create a qq plot,
+```{r}
+qqnorm(SRS)
+```
+
+It is a little bit concave down but allowable. So I will say the population distribution is normal.
+
+## 1b.
+The test mean is
+```{r}
+meanSRS = mean(SRS)
+meanSRS
+```
+and test SD is
+```{r}
+sdSRS = sd(SRS)
+sdSRS
+```
+and alpha = 0.9. We want to know CI for the mean with alpha = 0.9
+```{r}
+interval = -qt(0.05, n - 1) * sdSRS / sqrt(n)
+interval
+left = meanSRS - interval
+left
+right = meanSRS + interval
+right
+```
+so the interval is 22.25346 < mu < 29.07988
+
+## 1c.
+H0: mu = 25, HA: mu != 25
+
+and our interval includes 25 in significant level of 0.10, so we do not reject H0.
+
+## 1d.
+Is this the strong evidence that the population mean rate is significantly greater than 25 at level alpha=0.05?
+```{r}
+Tstat = (meanSRS - 25) / (sdSRS / sqrt(n))
+pVal = 1 - pt(Tstat, n - 1)
+pVal
+```
+and it is beyond 0.05, so this does not abort the null hypothesis that the population mean rate is greater than 25 at level alpha-0.05.
+
+## 1e.
+If the standard deviation of population is given, it means the question will be changed from t test to normal distribution problem. So the answer will be 2, 4.
+
+## 2. Test and power
+```{r}
+n = 10
+```
+H_0: mu = 12 vs. H_A: mu != 12
+```{r}
+alpha = 0.1
+sampleMean = 14.2
+sampleSD = 4.88
+```
+
+## 2a.
+The test statistic, T is
+```{r}
+Tstat = (sampleMean - 12) / (sampleSD / sqrt(n))
+Tstat
+```
+and the p value of this is
+```{r}
+pVal = 1 - pt(q = Tstat, df = n - 1) + pt(q= -Tstat, df = n - 1)
+pVal
+```
+This value is beyond alpha = 0.1, so we do not reject the null hypothesis.
+
+## 2b.
+The confidence interval is
+```{r}
+interval = qt(p = 1 - alpha / 2, df = n - 1) * sampleSD / sqrt(n)
+```
+from
+```{r}
+left = sampleMean - interval
+left
+```
+to
+```{r}
+right = sampleMean + interval
+right
+```
+and it includes 12. So I can tell a 90% confidence interval includes 12.
+
+## 2c.
+We assume the true SD is the sampleSD, and the power is P(reject H_0|H_0 is false).
+When mu < 11.37116 or mu > 17.02884, the H_0 is false and we need to reject it.
+So we need to find the rejection region when x < 11.37116 or x > 17.02884 when mu_A is 15.
+```{r}
+pnorm(q = left, mean = 15, sd = sampleSD) + 1 - pnorm(q = right, mean = 15, sd = sampleSD)
+```
+The power is 0.5673522.
