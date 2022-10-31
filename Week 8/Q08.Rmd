@@ -1,0 +1,41 @@
+mean 0.76
+sd = 0.08
+SRS n = 100
+significant level alpha = 0.05
+
+```{r}
+qnorm(0.025)
+0.76 + qnorm(0.025) * 0.08 / 10
+0.76 - qnorm(0.025) * 0.08 / 10
+```
+n = 24
+```{r}
+area = c(8793, 10651, 10743, 4193, 5267, 8393, 1468, 3524, 7416, 6360, 7558, 8209, 9333, 5048, 8868, 3475, 8874, 12212, 4895, 8624, 11876, 5980, 7979, 10962)
+
+hist(area)
+qqnorm(area)
+
+sampleMean = mean(area)
+sampleSD = sd(area)
+-qt(p = 0.05, df = 24 - 1) * sampleSD / sqrt(24)
+Tstat = (sampleMean - 8000) / (sampleSD / sqrt(24))
+Tstat
+pval = pt(Tstat, df = 23)
+pnorm(Tstat)
+
+sampleMean + qt(p = 0.005, 23) * sampleSD / sqrt(24)
+sampleMean - qt(p = 0.005, 23) * sampleSD / sqrt(24)
+```
+
+```{r}
+qnorm(0.005)
+100 + qnorm(0.005) * 2 / sqrt(25)
+pnorm(q= 98.9697, mean = 98, sd =  2) + 1 - pnorm(q = 101.03, mean = 98, sd = 2)
+a = 98 + qnorm(0.005) * 2 / sqrt(25)
+b = 98 - qnorm(0.005) * 2 / sqrt(25)
+
+pnorm(q = a, 98, 2) + 1 - pnorm(b, 98, 2)
+
+pnorm(qnorm(0.025, 98, 2/sqrt(25)), 100, 2/sqrt(25)) + 1 - pnorm(qnorm(1 - 0.025, 98, 2 / sqrt(25)), 100, 2/sqrt(25))
+```
+
