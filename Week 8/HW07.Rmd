@@ -95,10 +95,16 @@ right
 and it includes 12. So I can tell a 90% confidence interval includes 12.
 
 ## 2c.
-We assume the true SD is the sampleSD, and the power is P(reject H_0|H_0 is false).
-When mu < 11.37116 or mu > 17.02884, the H_0 is false and we need to reject it.
-So we need to find the rejection region when x < 11.37116 or x > 17.02884 when mu_A is 15.
+The quantile of alpha in the true population is
 ```{r}
-pnorm(q = left, mean = 15, sd = sampleSD) + 1 - pnorm(q = right, mean = 15, sd = sampleSD)
+mu = 15
+left = mu + qnorm(alpha / 2) * sampleSD / sqrt(n)
+left
+right = mu + qnorm(1 - alpha / 2) * sampleSD / sqrt(n)
+right
 ```
-The power is 0.5673522.
+And we need to reject X.bar < 12.46168 and X.bar > 17.53832
+```{r}
+pnorm(q = left, mean = 12, sd = sampleSD) + 1 - pnorm(q = right, mean = 12, sd = sampleSD)
+```
+The power is 0.6658941

@@ -463,13 +463,18 @@ right</code></pre>
 </div>
 <div id="c.-1" class="section level2">
 <h2>2c.</h2>
-<p>We assume the true SD is the sampleSD, and the power is P(reject
-H_0|H_0 is false). When mu &lt; 11.37116 or mu &gt; 17.02884, the H_0 is
-false and we need to reject it. So we need to find the rejection region
-when x &lt; 11.37116 or x &gt; 17.02884 when mu_A is 15.</p>
-<pre class="r"><code>pnorm(q = left, mean = 15, sd = sampleSD) + 1 - pnorm(q = right, mean = 15, sd = sampleSD)</code></pre>
-<pre><code>## [1] 0.5673522</code></pre>
-<p>The power is 0.5673522.</p>
+<p>The quantile of alpha in the true population is</p>
+<pre class="r"><code>mu = 15
+left = mu + qnorm(alpha / 2) * sampleSD / sqrt(n)
+left</code></pre>
+<pre><code>## [1] 12.46168</code></pre>
+<pre class="r"><code>right = mu + qnorm(1 - alpha / 2) * sampleSD / sqrt(n)
+right</code></pre>
+<pre><code>## [1] 17.53832</code></pre>
+<p>And we need to reject X.bar &lt; 12.46168 and X.bar &gt; 17.53832</p>
+<pre class="r"><code>pnorm(q = left, mean = 12, sd = sampleSD) + 1 - pnorm(q = right, mean = 12, sd = sampleSD)</code></pre>
+<pre><code>## [1] 0.6658941</code></pre>
+<p>The power is 0.6658941</p>
 </div>
 
 
