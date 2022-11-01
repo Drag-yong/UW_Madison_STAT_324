@@ -1,0 +1,96 @@
+```{r}
+## See the posted file bootstrap.Rmd for the bootstrap code; or here
+## it is:
+# Create a new function, bootstrap(x, n.boot), having two inputs:
+#   - x is a data vector
+#   - n.boot is the desired number of resamples from x
+# It returns a vector of n.boot t-hat values.
+bootstrap = function(x, n.boot) {
+  set.seed(0) # This code line is for this quiz
+  n = length(x)
+  x.bar = mean(x)
+  t.hat = numeric(n.boot) # create vector of length n.boot zeros
+  for(i in 1:n.boot) {
+    x.star = sample(x, size=n, replace=TRUE)
+    x.bar.star = mean(x.star)
+    s.star = sd(x.star)
+    t.hat[i] = (x.bar.star - x.bar) / (s.star / sqrt(n))
+  }
+  return(t.hat)
+}
+
+```
+
+example:
+
+```{r}
+data = rnorm(10)
+t.hat = bootstrap(data, 1000)
+#length(t.hat)
+#t.hat
+quantile(t.hat, 0.05)
+mdata = mean(data)
+sddata = sd(data)
+test.stat = (mdata - 0) / (sddata / sqrt(length(data)))
+test.stat
+# smaller than test statistics
+extreme = t.hat[t.hat<test.stat]
+# get a p value by using a portion
+pvalue = length(extreme) / length(t.hat)
+pvalue
+```
+
+## 1
+```{r}
+SRS = c(10, 20, 40, 60, 120, 150, 200, 300, 400)
+n = length(SRS)
+qqnorm(SRS)
+```
+
+## 2
+```{r}
+alpha = 0.99
+mean.SRS = mean(SRS)
+sd.SRS = sd(SRS)
+t.hat = bootstrap(SRS, 10000)
+lower = quantile(t.hat, 0.005)
+lower
+```
+
+## 3
+```{r}
+upper = quantile(t.hat, 1 - 0.005)
+upper
+```
+
+## 4
+```{r}
+ci.lower = mean.SRS - upper * sd.SRS / sqrt(n)
+ci.lower
+```
+
+## 5
+```{r}
+ci.upper = mean.SRS - lower * sd.SRS / sqrt(n)
+ci.upper
+```
+
+
+
+## 8
+```{r}
+test.stat = (mean.SRS - 150) / (sd.SRS / sqrt(length(SRS)))
+length(t.hat[t.hat > test.stat]) / length(t.hat)
+```
+
+
+```{r}
+# larger than test statistics
+larger = t.hat[t.hat > test.stat]
+# get a p value
+pvalue = length(extreme) / length(t.hat)
+pvalue
+
+```
+
+
