@@ -5,8 +5,8 @@
 #   - x is a data vector
 #   - n.boot is the desired number of resamples from x
 # It returns a vector of n.boot t-hat values.
+set.seed(0) # This code line is for this quiz
 bootstrap = function(x, n.boot) {
-  set.seed(0) # This code line is for this quiz
   n = length(x)
   x.bar = mean(x)
   t.hat = numeric(n.boot) # create vector of length n.boot zeros
@@ -49,7 +49,7 @@ qqnorm(SRS)
 
 ## 2
 ```{r}
-alpha = 0.99
+alpha = 0.01
 mean.SRS = mean(SRS)
 sd.SRS = sd(SRS)
 t.hat = bootstrap(SRS, 10000)
@@ -75,22 +75,25 @@ ci.upper = mean.SRS - lower * sd.SRS / sqrt(n)
 ci.upper
 ```
 
-
+## 7
+```{r}
+test.stat = (mean.SRS - 150) / (sd.SRS / sqrt(length(SRS)))
+test.stat
+```
 
 ## 8
 ```{r}
-test.stat = (mean.SRS - 150) / (sd.SRS / sqrt(length(SRS)))
 length(t.hat[t.hat > test.stat]) / length(t.hat)
 ```
 
-
+## 9
 ```{r}
-# larger than test statistics
-larger = t.hat[t.hat > test.stat]
-# get a p value
-pvalue = length(extreme) / length(t.hat)
-pvalue
+data = c(13, 14, 10, 17, 11, 15)
+```
 
+## 13
+```{r}
+sum(dbinom(x = 4:6, size = 6, prob = 1/2))
 ```
 
 
