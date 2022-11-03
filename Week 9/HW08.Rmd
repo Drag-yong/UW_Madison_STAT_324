@@ -1,0 +1,140 @@
+Yongsang Park
+
+## 1 Pumpkins
+```{r}
+n = 20
+pumpkins = c(9.6, 8.8, 5.1, 9.7, 9.1, 8.9, 8, 9.2, 2.7, 9.1, 8.5, 7.3, 9.3, 9.6, 4.1, 9.9, 7.6, 9, 7.2, 8.5)
+```
+
+## 1a.
+When I create a qq plot,
+```{r}
+qqnorm(pumpkins)
+```
+
+it is not reasonable that the population distribution is normal. It is concave down, which means it does not form a normal distribution.
+
+## 1b.
+The bootstrap code is
+```{r}
+## See the posted file bootstrap.Rmd for the bootstrap code; or here
+## it is:
+# Create a new function, bootstrap(x, n.boot), having two inputs:
+#   - x is a data vector
+#   - n.boot is the desired number of resamples from x
+# It returns a vector of n.boot t-hat values.
+bootstrap = function(x, n.boot) {
+  n = length(x)
+  x.bar = mean(x)
+  t.hat = numeric(n.boot) # create vector of length n.boot zeros
+  for(i in 1:n.boot) {
+    x.star = sample(x, size=n, replace=TRUE)
+    x.bar.star = mean(x.star)
+    s.star = sd(x.star)
+    t.hat[i] = (x.bar.star - x.bar) / (s.star / sqrt(n))
+  }
+  return(t.hat)
+}
+```
+and I am going to run 2000 resampling.
+```{r}
+t.hats = bootstrap(pumpkins, 2000)
+alpha = 0.1
+x.bar = mean(pumpkins)
+s = sd(pumpkins)
+```
+To find the CI, we need to find the quantile.
+```{r}
+t.lower = quantile(t.hats, probs = alpha / 2)
+t.upper = quantile(t.hats, probs = 1 - alpha / 2)
+```
+And Make a CI for mu.
+```{r}
+ci.low = x.bar - t.upper * s / sqrt(n)
+ci.high = x.bar - t.lower * s / sqrt(n)
+ci.low
+ci.high
+```
+This shows the CI.
+
+## 1c.
+```{r}
+# Null hypothesis
+H_0 = 7.2
+```
+I will figure out if H_A: mu > 7.2 is correct or not. I will use t.hats that I already ran.
+```{r}
+alpha = 0.05
+test.stat = (x.bar - H_0) / (s / sqrt(n))
+m.right = sum(t.hats > test.stat)
+p.value = m.right / 2000
+p.value
+```
+The p value is greater than alpha, so the null hypothesis that mu is 7.2 is plausible. So the conclusion is that we do not reject the null hypothesis.
+
+## 1d.
+We need to know if the median is 7.2 or not, so I will conduct the sign test.
+```{r}
+count = 0
+for (x in pumpkins) {
+  if (x > 7.2) {
+    count = count + 1
+  }
+}
+count
+```
+The test statistic B is 16.
+
+## 1e.
+We need to know the P(B >= 16)
+```{r}
+sum(dbinom(x = 16:n, size = n, prob = 0.5))
+```
+The p-value is 0.005908966
+
+## 1f.
+This is smaller than the alpha 0.05, so I reject the H_0: median = 7.2 and take H_A: median > 7.2
+
+## 2. Penguins
+```{r}
+n = 20
+m = 8 # male
+f = 12 # female
+```
+
+## 2a.
+the point estimation of femaie is
+```{r}
+pi = f / n
+pi
+```
+
+## 2b.
+The standard deviation is
+```{r}
+var = pi * (1 - pi) / n
+sd = sqrt(var)
+sd
+```
+
+## 2c.
+Each number of success (female) and failure (male) is greater than 5, so it is reasonable to compute a 95% CI for pi using the normal approximation.
+```{r}
+alpha = 0.05
+P = f / n
+left = P + qnorm(alpha / 2) * sd
+right = P - qnorm(alpha / 2) * sd
+left
+right
+```
+So the CI is from 0.3852967 to 0.8147033
+
+## 2d.
+The null hypothesis is the population proportion is not 63%. We will figure out that if we should reject the H_0 or not.
+```{r}
+pi_0 = 0.63
+test.stat = (P - pi_0) / sqrt(pi_0 * (1 - pi_0) / n)
+p.value = pnorm(q = -abs(test.stat)) + 1 - pnorm(q = abs(test.stat))
+p.value
+```
+The p value is larger than 0.05 where 0.05 is the level by default, so we do not reject the null hypothesis.

@@ -1,0 +1,399 @@
+## ---------- 1 Intro ----------
+
+## ---------- 2 Descriptive Statistics ----------
+
+```{r}
+## c() combines numbers into an R vector
+mileage = c(21.0,21.0,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,
+            16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,
+            15.2,13.3,19.2,27.3,26.0,30.4,15.8,19.7,15.0,21.4)
+mean(x=mileage)
+median(x=mileage)
+
+## q = quantile() sets q to a vector of five numbers;
+## access the ith number via q[i]
+q = quantile(x=mileage)
+q
+Q1 = q[2]
+Q1
+Q3 = q[4]
+Q3
+
+sd(x=mileage)
+
+stripchart(x=mileage, xlim=c(0, 40))
+
+hist(x=mileage)                                    # frequency
+hist(x=mileage, breaks=seq(from=10, to=40, by=10)) #   too few breaks
+hist(x=mileage, breaks=seq(from=10, to=40, by= 1)) #   too many
+hist(x=mileage, freq=FALSE)                        # density
+rug(x=mileage)                                     # add data points
+
+plot(density(mileage))
+rug(mileage)
+
+boxplot(x=mileage)
+
+weight = c(3,2,4)
+height = c(6,4,5)
+plot(x=weight, y=height, xlim=c(0,6), ylim=c(0,6))
+
+## from discussion for "2 Descriptive Statistics"
+time =          c(62  , 93  , 105  , 110, 175  , 245  )
+concentration = c(24.4, 22.8,  18.1,  21,  18.7,  14.3)
+plot(x=time, y=concentration,
+     xlim=c(0,300), ylim=c(0, 30),
+     main="Drug concentration vs. time",
+     xlab="time since administration (minutes)",
+     ylab="drug concentration in blood (mg/mL)")
+```
+
+## ---------- 3 Probability ----------
+
+
+## ---------- 4 Random Variables and Distributions ----------
+
+```{r}
+## For X ~ Bin(n, pi):
+dbinom(x=3, size=4, prob=.996) # dbinom(x=x, size=n, prob=pi) gives P(X = x)
+pbinom(q=3, size=4, prob=.996) # pbinom(x=x, size=n, prob=pi) gives P(X <= x)
+
+## For X ~ N(mu, sigma^2):
+## pnorm(q, mean=mu, sd=sigma) gives P(X < q)
+pnorm(q=2.75, mean=3, sd=.25)
+## qnorm(p, mean=mu, sd=sigma) gives x such that P(X < x) = p
+qnorm(p=.25, mean=100, sd=15)
+```
+
+## ---------- 5 Estimation ----------
+
+```{r}
+n = 1000
+x = rnorm(n) # rnorm(n) gives n random points from N(0, 1^2)
+qqnorm(x) # normal probability plot
+
+paint = c(1.29, 1.12, 0.88, 1.65, 1.48, 1.59, 1.04, 0.83, 1.76, 1.31,
+          0.88, 1.71, 1.83, 1.09, 1.62, 1.49)
+qqnorm(paint)
+n = length(paint)
+# run this a few times to see what "straight" means for this sample size
+x = rnorm(n); qqnorm(x)
+```
+
+## ---------- 6 Hypothesis Testing Definitions and a First Test ----------
+
+## ---------- 7 More One-Sample Confidence Intervals and Tests ----------
+
+```{r}
+# next line: this is like qnorm(.025), since as n goes toward
+# infinity, t_{n-1} becomes very like N(0, 1)
+-qt(p=.025, df=1000-1) # gives t such that P(T_{1000-1} < t) = .025
+-qt(p=.025, df=10-1)   # gives t such that P(T_{10  -1} < t) = .025
+pt(-1, df=10) # gives area left of -1 under T_{10 - 1}
+
+# next line gives P(X >= 5) = P(X=5) + P(X=6) + ... + P(X=11) for
+# X ~ Bin(n=11, pi=.5)
+sum(dbinom(x=5:11, size=11, prob=.5))
+
+## See the posted file bootstrap.Rmd for the bootstrap code; or here
+## it is:
+# Create a new function, bootstrap(x, n.boot), having two inputs:
+#   - x is a data vector
+#   - n.boot is the desired number of resamples from x
+# It returns a vector of n.boot t-hat values.
+bootstrap = function(x, n.boot) {
+  n = length(x)
+  x.bar = mean(x)
+  t.hat = numeric(n.boot) # create vector of length n.boot zeros
+  for(i in 1:n.boot) {
+    x.star = sample(x, size=n, replace=TRUE)
+    x.bar.star = mean(x.star)
+    s.star = sd(x.star)
+    t.hat[i] = (x.bar.star - x.bar) / (s.star / sqrt(n))
+  }
+  return(t.hat)
+}
+
+# Use the bootstrap() function to get an approximate sampling
+# distribution of T for the smoke data.
+data = c(29, 30, 53, 75, 34, 21, 12, 58, 117, 119, 115, 134, 253, 289, 287)
+B = 5000
+t.hats = bootstrap(data, B)
+
+# Plot the approximate sampling distribution.
+hist(t.hats, freq=FALSE, xlab = "Bootstrap t-hat values",
+     main = "Approximate Sampling Distribution of T")
+
+n = length(data) # Get summary statistics.
+x.bar = mean(data)
+s = sd(data)
+cat(sep="", "n=", n, ", x.bar=", x.bar, ", s=", s, "\n")
+
+# Make a CI for mu. First find quantiles for a 95% interval.
+t.lower = quantile(t.hats, probs=.025) # This is our t_{1 - alpha/2}.
+t.upper = quantile(t.hats, probs=.975) # This is our t_{alpha/2}.
+cat(sep="", "t.lower=", t.lower, ", t.upper=", t.upper, "\n")
+ci.low  = x.bar - t.upper * s / sqrt(n) # This is our lower interval endpoint.
+ci.high = x.bar - t.lower * s / sqrt(n) # This is our upper interval endpoint.
+cat(sep="", "confidence interval: (", ci.low, ", ", ci.high, ")\n")
+
+# Run a test of H_0: mu = m_0. First find t_{obs}.
+mu.0 = 75
+t.obs = (x.bar - mu.0) / (s / sqrt(n))
+cat(sep="", "t.obs=", t.obs, "\n")
+# sum() counts the TRUE values by first converting TRUE / FALSE values to 1 / 0.
+m.left = sum(t.hats < t.obs) # This is for H_A: mu < mu_0.
+p.value.left = m.left / B
+cat(sep="", "m.left=", m.left, ", B=", B, ", p.value.left=", p.value.left, "\n")
+m.right = sum(t.hats > t.obs) # This is for H_A: mu > mu_0.
+p.value.right = m.right / B
+cat(sep="", "m.right=", m.right, ", B=", B, ", p.value.right=", p.value.right, "\n")
+
+# This is for H_A: mu != mu_0. ("!=" means "is not equal to.")
+m.left.abs = sum(t.hats < -abs(t.obs))
+m.right.abs = sum(t.hats > abs(t.obs))
+p.value.two.sided = (m.left.abs + m.right.abs) / B
+cat(sep="", "m.left.abs=", m.left.abs, ", m.right.abs=", m.right.abs,
+    ", B=", B, ", p.value.two.sided=", p.value.two.sided, "\n")
+```
+
+## ---------- 8 Comparing Two Populations via Independent Samples ----------
+
+```{r}
+# lizards
+dead = c(17.65, 20.83, 24.59, 18.52, 21.40, 23.78, 20.36, 18.83, 21.83, 20.06)
+live = c(23.76, 21.17, 26.13, 20.18, 23.01, 24.84, 19.34, 24.94, 27.14, 25.87, 18.95, 22.61)
+
+x = dead
+y = live
+
+summary(x) # numerical summaries
+sd(x)
+summary(y)
+sd(y)
+
+m = matrix(data=1:2, nrow=2, ncol=1)
+layout(m) # make a 2x2 graph
+hist(x, xlim=c(15, 30))
+hist(y, xlim=c(15, 30))
+layout(1) # reset to usual 1x1 graph
+
+## See boottwo.Rmd for the two-sample bootstrap code; or here it is:
+# Create a new function, bootstrap(x, y, n.boot), having three inputs:
+#   - x is a sample from a firts  population
+#   - y is a sample from a second population
+#   - n.boot is the desired number of resamples
+# It returns a vector of n.boot t-hat values.
+boottwo = function(x, y, n.boot) {
+  difference = mean(x) - mean(y)
+  nx = length(x)
+  ny = length(y)
+  t.hat = numeric(n.boot) # create vector of length n.boot zeros
+  for(i in 1:n.boot) {
+    x.star = sample(x=x, size=nx, replace=TRUE)
+    y.star = sample(x=y, size=ny, replace=TRUE)
+    x.bar.star = mean(x.star)
+    y.bar.star = mean(y.star)
+    s.x.star = sd(x.star)
+    s.y.star = sd(y.star)
+    t.hat[i] = ((x.bar.star - y.bar.star) - difference) /
+        sqrt((s.x.star^2/nx) + (s.y.star^2/ny))
+  }
+  return(t.hat)
+}
+
+starved = c(1.9, 2.1, 3.8, 9.0, 9.6, 13.0, 14.7, 17.9, 21.7, 29.0, 72.3)
+x = starved
+fed = c(1.5, 1.7, 2.4, 3.6, 5.7, 22.6, 22.8, 39.0, 54.4, 72.1, 73.6, 79.5, 88.9)
+y = fed
+
+summary(x) # numerical summaries
+sd(x)
+summary(y)
+sd(y)
+
+m = matrix(data=1:2, nrow=2, ncol=1)
+layout(m) # make a 2x1 graph
+stripchart(x, xlim=c(0, 100))
+stripchart(y, xlim=c(0, 100))
+layout(1) # reset graph to usual 1x1
+
+qqnorm(x)
+qqnorm(y)
+
+# Run a test of H_0: mu_X - mu_Y = 0.
+t.obs = (mean(x) - mean(y)) /
+sqrt(var(x) / length(x)  + var(y) / length(y))
+cat(sep="", "t.obs=", t.obs, "\n")
+
+B = 5000
+t.hats = boottwo(x, y, B)
+# hist(t.hats)
+
+# sum() counts the TRUE values by first converting TRUE / FALSE values to 1 / 0.
+m.left = sum(t.hats < t.obs) # This is for H_A: mu_X - mu_Y < 0.
+p.value.left = m.left / B
+cat(sep="", "m.left=", m.left, ", B=", B, ", p.value.left=", p.value.left, "\n")
+
+m.right = sum(t.hats > t.obs) # This is for H_A: mu_X - mu_Y > 0.
+p.value.right = m.right / B
+cat(sep="", "m.right=", m.right, ", B=", B, ", p.value.right=", p.value.right, "\n")
+
+# This is for H_A: mu_X - mu_Y != 0. ("!=" means "is not equal to.")
+m.left.abs = sum(t.hats < -abs(t.obs))
+m.right.abs = sum(t.hats > abs(t.obs))
+p.value.two.sided = (m.left.abs + m.right.abs) / B
+cat(sep="", "m.left.abs=", m.left.abs, ", m.right.abs=", m.right.abs,
+", B=", B, ", p.value.two.sided=", p.value.two.sided, "\n")
+
+# Wilcoxon rank sum test
+starved = c(1.9, 2.1, 3.8, 9.0, 9.6, 13.0, 14.7, 17.9, 21.7, 29.0, 72.3)
+fed = c(1.5, 1.7, 2.4, 3.6, 5.7, 22.6, 22.8, 39.0, 54.4, 72.1, 73.6, 79.5, 88.9)
+wilcox.test(starved, fed)
+
+# Here is a convenience function to make the calculations for the 2-sample t
+# test and interval, and the Welch's t test and interval, easy:
+#
+# t.test(x, y, alternative = c("two.sided", "less", "greater"),
+#        mu = 0, paired = FALSE, var.equal = FALSE, conf.level = 0.95)
+#
+# - x and y are the data vectors
+# - alternative is "two.sided" by default; other wise you should assign it via 
+#   alternative="less" or alternative="greater"
+# - paired=FALSE indicates independent samples, which we have here
+# - var.equal=FALSE, the default, gives the Welch's t test and interval, while
+#   var.equal=TRUE gives the 2-sample t test and interval that assumes equal
+#   population variances
+# - mu is the null value of the difference in means; it defaults to 0
+# - conf.level is the confidence level; it defaults to 0.95
+#
+# For example, here I reproduce the calculations from 8.1:
+dead = c(17.65, 20.83, 24.59, 18.52, 21.40, 23.78, 20.36, 18.83, 21.83, 20.06)
+live = c(23.76, 21.17, 26.13, 20.18, 23.01, 24.84, 19.34, 24.94, 27.14, 25.87, 18.95, 22.61)
+t.test(x=dead, y=live, alternative="two.sided", var.equal=TRUE, conf.level=.95)
+```
+
+## ---------- 9 Paired Tests ----------
+
+```{r}
+# Here I reproduce the calculations for the depression example:
+B = c(1.83, .50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+A = c( .88, .65,  .60, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+D = B - A
+t.test(D, alternative="greater")
+```
+
+## ---------- 10 ANOVA ----------
+
+```{r}
+# R code for pre-ANOVA numerical and graphical summaries
+bihai = c(47.12,46.75,46.81,47.12,46.67,47.43,46.44,46.64,48.07,48.34,48.15,
+          50.26,50.12,46.34,46.94,48.36)
+red = c(41.90,42.01,41.93,43.09,41.47,41.69,39.78,40.57,39.63,42.18,40.66,
+        37.87,39.16,37.40,38.20,38.07,38.10,37.97,38.79,38.23,38.87,37.78,38)
+yellow = c(36.78,37.02,36.52,36.11,36.03,35.45,38.13,37.10,35.17,36.82,36.66,
+           35.68,36.03,34.57,34.6)
+(flower.lengths = c(bihai, red, yellow))
+(N=length(flower.lengths))
+
+(bihai.labels = rep(x="bihai", times=length(bihai)))
+red.labels = rep(x="red", times=length(red))
+yellow.labels = rep(x="yellow", times=length(yellow))
+(flower.labels = c(bihai.labels, red.labels, yellow.labels)) # vector of words
+
+# R wants a categorical variable stored as a "factor" vector.
+(flower.species = factor(flower.labels))
+
+# Here the formula "flower.lengths ~ flower.species" means
+# "make three stripcharts of flower.lengths, one for each
+# category in flower.species."
+stripchart(flower.lengths ~ flower.species, vertical=TRUE)
+
+# Here are sample means. This tapply() function call gives the sample
+# mean flower.lengths for each species in the flower.species variable.
+tapply(X=flower.lengths, INDEX=flower.species, FUN=mean)
+
+# Here are sample standard deviations. This tapply() function call
+# gives the sample sd() flower.lengths for each species in the
+# flower.species variable.
+tapply(X=flower.lengths, INDEX=flower.species, FUN=sd)
+
+# R code for ANOVA
+flower.model = aov(flower.lengths ~ flower.species)
+anova(flower.model) # ANOVA table
+plot(residuals(flower.model) ~ fitted(flower.model), ylab = "Residuals",
+     xlab = "Fitted Values", main = "Residuals vs Fitted Values")
+qqnorm(residuals(flower.model), main = "QQ Plot of Residuals")
+
+# Check the by-hand review example:
+X = c(0, 1, 2); Y = c(1, 2, 3); Z = c(5, 6, 7); data = c(X, Y, Z)
+sample = factor(c(rep(x="X", times=length(X)), rep("Y", length(Y)), rep("Z", length(Z))))
+review.model = aov(data ~ sample)
+anova(review.model)
+
+# Here is R code to make the Tukey-Kramer pairwise confidence intervals:
+(CIs = TukeyHSD(flower.model, conf.level = 0.95)) # flower data
+plot(CIs) # See simultaneous confidence intervals.
+
+(CIs = TukeyHSD(review.model, conf.level = 0.95)) # by-hand review data
+plot(CIs)
+```
+
+## ---------- 11 Correlation and Regression ----------
+
+```{r}
+returning = c(74,66,81,52,73,62,52,45,62,46,60,46,38)
+new = c( 5,6,8,11,12,15,16,17,18,18,19,20,20)
+cor(x=returning, y=new)              # cor() gives correlation
+model = lm(new ~ returning)          # lm(y ~ x) gives linear model
+model
+plot(x=returning, y=new, xlim=c(0, 85), ylim=c(0, 35)) # scatterplot
+abline(model)                        # abline() adds line
+
+# make a prediction as y = intercept + slope * x
+percentReturning = 60
+model$coefficients[1] + model$coefficients[2] * percentReturning
+
+# QQ plot of residuals (straight => can assume normal population of errors)
+qqnorm(residuals(model))
+
+# plot residuals vs. fitted values: (reasonably equal vertical spread
+# across x values => can assume equal error variances across x values)
+plot(x=fitted(model), y=residuals(model))
+
+summary(model)                       # test H_0: beta_i = 0
+confint(model)                       # CIs for beta_i
+```
+
+## ---------- 12 Chi-squared test ----------
+```{r}
+# Test goodness-of-fit of kids' sample of M&Ms to Nice distribution.
+kids.sample = c(12,15,17,6)
+Nice.population = c(.20, .25, .40, .15)
+chisq.test(x=kids.sample, p=Nice.population)
+
+# Make comparative bar plots.
+colors = c("Brown", "Yellow", "Green", "Red")
+layout(matrix(data=1:2, nrow=2, ncol=1)) # Allow two graphs in one plot.
+barplot(height=kids.sample, names.arg=colors, main="M&M's sample")
+barplot(height=Nice.population, names.arg=colors, main="Nice population")
+layout(1) # Return to one graph per plot.
+
+# Do it again for the Naughty population.
+Naughty.population = c(.50, .20, .10, .20)
+
+layout(matrix(data=1:2, nrow=2, ncol=1)) # Allow two graphs in one plot.
+barplot(height=kids.sample, names.arg=colors, main="M&M's sample")
+barplot(height=Naughty.population, names.arg=colors, main="Naughty population")
+layout(1) # Return to one graph per plot.
+
+chisq.test(x=kids.sample, p=Naughty.population)
+
+# Test independence of education and smoking.
+
+# matrix(data, nrow, ncol, byrow=FALSE) fills an nrow by ncol matrix,
+# by column, from the vector data.
+(French.men = matrix(data = c(56,37,53, 54,43,28, 41,27,36, 36,32,16),
+   nrow=3, ncol=4, byrow=FALSE))
+chisq.test(French.men)
+```
