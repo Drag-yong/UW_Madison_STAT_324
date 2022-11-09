@@ -1,0 +1,84 @@
+Yongsang Park
+
+## 1. Oximeters
+```{r}
+n1 = 5
+n2 = 7
+x1.bar = 98.3
+x1.sd = 0.31
+x2.bar = 96.1
+x2.sd = 0.29
+```
+## 1a.
+98% CI means 1-alpha = 0.98
+```{r}
+alpha = 0.02
+```
+According to the rule of thumb,
+```{r}
+x1.sd^2/x2.sd^2
+```
+is within factor of 2, so it is plausible that each variance is same.
+```{r}
+pooled.var = ((n1 - 1) * x1.sd^2 + (n2 -1) * x2.sd^2) / (n1 + n2 - 2)
+edge = qt(alpha / 2, df = n1 + n2 - 2) * sqrt(pooled.var / n1 + pooled.var / n2)
+```
+The interval is from
+```{r}
+x1.bar - x2.bar + edge
+```
+to
+```{r}
+x1.bar - x2.bar - edge
+```
+
+## 1b.
+The null hypothesis is that the difference of each mean is 0. We need to reject this.
+```{r}
+tstat = ((x1.bar - x2.bar) - 0) / sqrt(pooled.var / n1 + pooled.var / n2)
+pt(-abs(tstat), df = n1 + n2 - 2) * 2
+```
+The p-value is way smaller than alpha. So this value is a strong evidence that H_0 is not plausible.
+
+## 2. Dairy
+```{r}
+old = c(43, 51, 44, 47, 38, 46, 40, 35)
+n.old = 8
+new = c(47, 75, 85, 100, 58)
+n.new = 5
+alpha = 0.05
+```
+## 2a.
+```{r}
+hist(new, xlim = c(30, 105), ylim = c(0, 4))
+hist(old, xlim = c(30, 105), ylim = c(0, 4))
+```
+
+I chose a histogram with the same limitations of x and y values. The histograms show the number of variables and skews, so I chose the histogram. They show that the histogram with the old diet values is concentrated on the left, but the histogram with the new diet values shows that the data are equally distributed.
+```{r}
+qqnorm(old)
+qqnorm(new)
+```
+
+I chose qq plots to see if they are normal or not. I can tell they are normal.
+```{r}
+new.sd = sd(new)
+old.sd = sd(old)
+rule.of.thumb = new.sd^2 / old.sd^2
+rule.of.thumb
+```
+The first graph and our rule of thumb of 2 suggest more spread in the new diet group, so I can tell that we do not assume equal variance.
+## 2b.
+We cannot assume equal variance, so we need to use the Welch T-Test.
+```{r}
+new.bar = mean(new)
+old.bar = mean(old)
+new.var = new.sd^2
+old.var = old.sd^2
+tstat = (new.bar - old.bar - 0) / sqrt(new.var / n.new + old.var / n.old)
+dof = (new.var / n.new + old.var / n.old)^2 / ((new.var / n.new)^2 / (n.new - 1) + (old.var / n.old)^2 / (n.old - 1))
+
+pval = pt(-abs(tstat), dof) * 2
+pval
+```
+The p-value is smaller than alpha, so we reject the null hypothesis that two mean are the same. The new diet makes a significant difference from the old diet.
