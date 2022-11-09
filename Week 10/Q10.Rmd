@@ -1,0 +1,69 @@
+## Q1
+```{r}
+Virginica = c(6.0,5.1,5.9,5.6,5.8,6.6,4.5,6.3,5.8,6.1,5.1,5.3,5.5,5.0,5.1,
+5.3,5.5,6.7,6.9,5.0,5.7,4.9,6.7,4.9,5.7,6.0,4.8,4.9,5.6,5.8,
+6.1,6.4,5.6,5.1,5.6,6.1,5.6,5.5,4.8,5.4,5.6,5.1,5.1,5.9,5.7,
+5.2,5.0,5.2,5.4,5.1)
+Versicolor = c(4.7,4.5,4.9,4.0,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4.0,4.7,3.6,
+4.4,4.5,4.1,4.5,3.9,4.8,4.0,4.9,4.7,4.3,4.4,4.8,5.0,4.5,3.5,
+3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4.0,4.4,4.6,4.0,3.3,4.2,
+4.2,4.2,4.3,3.0,4.1)
+qqnorm(Virginica)
+hist(Virginica)
+qqnorm(Versicolor)
+hist(Versicolor)
+var_vir = sd(Virginica)^2
+var_ver = sd(Versicolor)^2
+var_vir / var_ver
+```
+
+## Q3
+```{r}
+alpha = 0.05
+n1 = length(Virginica)
+n2 = length(Versicolor)
+
+pooled_var = ((n1 - 1) * var_vir + (n2 - 1) * var_ver) / (n1 + n2 - 2)
+test_statistic = (mean(Virginica) - mean(Versicolor) - 0) / sqrt(pooled_var / n1 + pooled_var / n2)
+test_statistic
+```
+
+## Q4
+```{r}
+1 - pt(test_statistic, df = n1 + n2 - 2)
+```
+
+## Q5
+```{r}
+x1_bar = mean(Virginica)
+x2_bar = mean(Versicolor)
+test_Statistic_alpha = qt(alpha / 2, df = n1 + n2 - 2)
+edge = test_Statistic_alpha * sqrt(var_vir / n1 + var_ver / n2)
+
+x1_bar - x2_bar - edge
+x1_bar - x2_bar + edge
+```
+
+## Q6
+```{r}
+spruce = c(132, 145, 162, 166, 175)
+fir = c(137, 147, 158, 160)
+n1 = 5
+n2 = 4
+
+var_spr = sd(spruce)^2
+var_fir = sd(fir)^2
+var_spr / var_fir
+```
+
+## Q7
+```{r}
+x1_bar = mean(spruce)
+x2_bar = mean(fir)
+test_statistic = (x1_bar - x2_bar - 0) / sqrt(var_spr / n1 + var_fir / n2)
+dof = (var_spr / n1 + var_fir / n2)^2 / ((var_spr / n1)^2 / (n1 - 1) + (var_fir / n2)^2 / (n2 - 1))
+pt(-abs(test_statistic), 81) * 2
+pt(-abs(test_statistic), 82) * 2
+pt(-abs(test_statistic), dof) * 2
+```
+
