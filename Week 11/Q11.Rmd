@@ -1,0 +1,91 @@
+## Q1
+```{r}
+kevlar = c(51, 55, 53)
+fiberglass = c(63, 54, 61)
+```
+
+## Q7
+```{r}
+wilcox.test(kevlar, fiberglass)
+```
+
+
+## Q8
+```{r}
+x = c(0.099, 0.093, 0.106, 0.106, 0.102, 0.107, 0.103, 0.153, 0.144, 0.153, 0.155, 0.152, 0.152, 0.155)
+y = c(0.127, 0.120, 0.118, 0.125, 0.123, 0.130, 0.115, 0.178, 0.175, 0.171, 0.173, 0.172, 0.164, 0.170)
+qqnorm(x)
+qqnorm(y)
+mean(x)
+mean(y)
+```
+
+## Q9
+```{r}
+set.seed(0)
+## See boottwo.Rmd for the two-sample bootstrap code; or here it is:
+# Create a new function, bootstrap(x, y, n.boot), having three inputs:
+#   - x is a sample from a firts  population
+#   - y is a sample from a second population
+#   - n.boot is the desired number of resamples
+# It returns a vector of n.boot t-hat values.
+boottwo = function(x, y, n.boot) {
+  difference = mean(x) - mean(y)
+  nx = length(x)
+  ny = length(y)
+  t.hat = numeric(n.boot) # create vector of length n.boot zeros
+  for(i in 1:n.boot) {
+    x.star = sample(x=x, size=nx, replace=TRUE)
+    y.star = sample(x=y, size=ny, replace=TRUE)
+    x.bar.star = mean(x.star)
+    y.bar.star = mean(y.star)
+    s.x.star = sd(x.star)
+    s.y.star = sd(y.star)
+    t.hat[i] = ((x.bar.star - y.bar.star) - difference) /
+        sqrt((s.x.star^2/nx) + (s.y.star^2/ny))
+  }
+  return(t.hat)
+}
+
+# Run a test of H_0: mu_X - mu_Y = 0.
+t.obs = (mean(x) - mean(y)) /
+sqrt(var(x) / length(x)  + var(y) / length(y))
+cat(sep="", "t.obs=", t.obs, "\n")
+
+B = 10000
+t.hats = boottwo(x, y, B)
+# hist(t.hats)
+
+# This is for H_A: mu_X - mu_Y != 0. ("!=" means "is not equal to.")
+m.left.abs = sum(t.hats < -abs(t.obs))
+m.right.abs = sum(t.hats > abs(t.obs))
+p.value.two.sided = (m.left.abs + m.right.abs) / B
+cat(sep="", "m.left.abs=", m.left.abs, ", m.right.abs=", m.right.abs,
+", B=", B, ", p.value.two.sided=", p.value.two.sided, "\n")
+```
+
+## Q11
+```{r}
+wilcox.test(x, y, alternative = "two.sided")
+```
+
+## Q12
+```{r}
+pi.x = 12/21
+pi.y = 23/54
+pi = (12 + 23) / (21 + 54)
+tstat = (pi.x - pi.y) / sqrt(pi*(1-pi)*(1/21 + 1/54))
+2 * pnorm(-abs(tstat))
+```
+
+## Q15
+```{r}
+day.3 = c(1341, 1316, 1352, 1332, 1327)
+day.6 = c(1376, 1373, 1366, 1384, 1358)
+D = day.6 - day.3
+d.bar = mean(D)
+d.sd = sd(D)
+t = d.bar / (d.sd / sqrt(5))
+pt(-t, 4)
+```
+
