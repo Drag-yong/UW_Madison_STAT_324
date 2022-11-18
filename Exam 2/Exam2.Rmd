@@ -1,0 +1,74 @@
+Yongsang Park
+
+## 2A
+```{r}
+alpha = 0.01
+pi.h = 32 / 100 # head
+```
+
+## 2B
+```{r}
+var.h = pi.h * (1- pi.h) / 100
+error.margin = qnorm(1 - alpha / 2) * sqrt(pi.h * (1 - pi.h) / 100)
+error.margin
+```
+
+# Q5
+```{r}
+X = c(37.0, 43.2, 38.1, 38.2, 36.0, 39.5, 39.4, 38.7, 39.8, 40.9)
+Y = c(38.4, 37.4, 38.4, 40.0, 39.7, 38.6, 42.4, 40.7, 41.0, 39.4)
+```
+
+## 5A
+```{r}
+qqnorm(X)
+qqnorm(Y)
+```
+
+## 5B
+```{r}
+X.sd = sd(X)
+Y.sd = sd(Y)
+X.sd^2 / Y.sd^2
+```
+
+## 5C
+```{r}
+X.n = length(X)
+Y.n = length(Y)
+pooled = ((X.n - 1) * X.sd^2 + (Y.n - 1) * Y.sd^2) / (X.n + Y.n - 2)
+pooled
+```
+
+## 5D
+```{r}
+alpha = 0.05
+X.bar = mean(X)
+Y.bar = mean(Y)
+CI = qt(p = 1 - alpha / 2, df = X.n + Y.n - 2) * sqrt(pooled / X.n + pooled / Y.n)
+X.bar - Y.bar - CI
+```
+
+## 6A
+```{r}
+n = (1 * (qnorm(0.9) + qnorm(1 - 0.05 / 2)) / 3 - 4)^2
+n
+```
+
+# Q8
+```{r}
+X = c(28, 31, 27, 25, 31, 29)
+```
+
+## 8A
+
+## 8D
+```{r}
+X - 30
+```
+
+## 8E
+```{r}
+sum(dbinom(0:2, 6, 0.5))
+```
+
