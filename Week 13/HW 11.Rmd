@@ -1,0 +1,59 @@
+Yongsang Park
+
+## 1. Ethanol
+```{r}
+T1 = c(63, 54, 69, 50, 72)
+T2 = c(45, 60, 40, 56)
+T3 = c(31, 40, 45, 25, 23, 28)
+```
+
+## 1a.
+```{r}
+treat.lengths = c(T1, T2, T3)
+T1.labels = rep(x = "T1", times = length(T1))
+T2.labels = rep(x = "T2", times = length(T2))
+T3.labels = rep(x = "T3", times = length(T3))
+sleep.labels = c(T1.labels, T2.labels, T3.labels)
+
+sleep.treats = factor(sleep.labels)
+
+stripchart(treat.lengths ~ sleep.treats, vertical = TRUE)
+```
+
+When I draw a graph, I guess an ANOVA test will reject null hypothesis. My intuition tells that the means are different.
+
+## 1b.
+```{r}
+treat.model = aov(treat.lengths ~ sleep.labels)
+anova(treat.model)
+```
+
+## 1c.
+```{r}
+qqnorm(T1)
+qqnorm(T2)
+qqnorm(T3)
+```
+
+Each treatment population follows normal.
+
+```{r}
+SD1 = sd(T1)
+SD2 = sd(T2)
+SD3 = sd(T3)
+SD1
+SD2
+SD3
+```
+The factor of all three standard deviations are less than 2, and we can assume they are the same according to the rule of thumb. And of course, they are independent.
+
+## 1d.
+According to the ANOVA table on 1b, F value is much greater than 1. I can tell that this values are strong evidences that we need to reject the null hypothesis that all three means are the same.
+
+## 1e.
+```{r}
+CIs = TukeyHSD(treat.model, conf.level = 0.95)
+plot(CIs)
+```
+
+According to this plot, Treatment2 - Treatment1 includes 0. It means we can assume that the population mean of a pair T1 and T2 are the same. The population mean of T3-T1 and T3-T2 are different.
